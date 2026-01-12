@@ -1,63 +1,45 @@
-{{-- File/Folder Row for Embedded List View --}}
-@php
+{{-- File/Folder Row for Embedded List View --}}@php
     $itemId = $item->getIdentifier();
     $itemName = $item->getName();
     $isReadOnly = $isReadOnly ?? false;
     $isSelected = $this->isSelected($itemId);
 @endphp
-<div
-    wire:key="list-{{ md5($itemId) }}"
-    x-data="{ isDragOver: false }"
-    @if(!$isReadOnly)
-        draggable="true"
-        x-on:dragstart="draggedItemId = @js($itemId); isDragging = true"
-        x-on:dragend="isDragging = false; draggedItemId = null"
-        @if($item->isFolder())
-            x-on:dragover.prevent="isDragOver = true"
-            x-on:dragleave="isDragOver = false"
-            x-on:drop.prevent="isDragOver = false; if (draggedItemId && draggedItemId !== @js($itemId)) { $wire.handleDrop(@js($itemId), draggedItemId) }"
-        @endif
-    @endif
-    x-on:click="$wire.handleItemClick(@js($itemId))"
-    class="group flex cursor-pointer items-center gap-3 bg-white dark:bg-gray-900 px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800
-        {{ $isSelected ? 'bg-primary-50 dark:bg-primary-900/20' : '' }}"
-    @if(!$isReadOnly):class="{ 'bg-primary-50 dark:bg-primary-900/20': isDragOver }"@endif
+<div wire:key="list-{{ md5($itemId) }}" x-data="{ isDragOver: false }" @if(!$isReadOnly)
+    draggable="true" x-on:dragstart="draggedItemId = @js($itemId); isDragging = true" x-on:dragend="isDragging = false; draggedItemId = null" @if($item->isFolder())
+    x-on:dragover.prevent="isDragOver = true" x-on:dragleave="isDragOver = false" x-on:drop.prevent="isDragOver = false; if (draggedItemId && draggedItemId !== @js($itemId)) { $wire.handleDrop(@js($itemId), draggedItemId) }" @endif@endifx-on:click="$wire.handleItemClick(@js($itemId))" class="group flex cursor-pointer items-center gap-3 bg-white dark:bg-gray-900 px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800
+        {{ $isSelected ? 'bg-primary-50 dark:bg-primary-900/20' : '' }}" @if(!$isReadOnly):class="{ 'bg-primary-50 dark:bg-primary-900/20': isDragOver }"@endif
 >
     {{-- Selection Checkbox --}}
     @if(!$isReadOnly)
-        <button
-            type="button"
-            x-on:click.stop="$wire.toggleSelection(@js($itemId), true)"
-            class="flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all
+        <button type="button" x-on:click.stop="$wire.toggleSelection(@js($itemId), true)" class="flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-all
                 {{ $isSelected
                     ? 'border-primary-500 bg-primary-500 text-white'
-                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800' }}"
-        >
+                    : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800' }}">
             @if($isSelected)
-                <x-heroicon-m-check class="w-2.5 h-2.5" />
+                <x-heroicon-m-check class="w-2.5 h-2.5"/>
             @endif
         </button>
     @endif
 
     {{-- Thumbnail/Icon --}}
     @if($item->isFolder())
-        <x-heroicon-o-folder class="w-8 h-8 shrink-0 text-primary-500" />
+        <x-heroicon-o-folder class="w-8 h-8 shrink-0 text-primary-500"/>
     @else
         <div class="relative h-10 w-16 shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-gray-700">
             @if($item->getThumbnail())
-                <img src="{{ $item->getThumbnail() }}" alt="{{ $itemName }}" class="h-full w-full object-cover" />
+                <img src="{{ $item->getThumbnail() }}" alt="{{ $itemName }}" class="h-full w-full object-cover"/>
             @else
                 <div class="flex h-full items-center justify-center">
                     @if($item->isVideo())
-                        <x-heroicon-o-video-camera class="w-5 h-5 text-red-500 dark:text-red-400" />
+                        <x-heroicon-o-video-camera class="w-5 h-5 text-red-500 dark:text-red-400"/>
                     @elseif($item->isImage())
-                        <x-heroicon-o-photo class="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                        <x-heroicon-o-photo class="w-5 h-5 text-blue-500 dark:text-blue-400"/>
                     @elseif($item->isDocument())
-                        <x-heroicon-o-document-text class="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <x-heroicon-o-document-text class="w-5 h-5 text-green-600 dark:text-green-400"/>
                     @elseif($item->isAudio())
-                        <x-heroicon-o-musical-note class="w-5 h-5 text-purple-500 dark:text-purple-400" />
+                        <x-heroicon-o-musical-note class="w-5 h-5 text-purple-500 dark:text-purple-400"/>
                     @else
-                        <x-heroicon-o-document class="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                        <x-heroicon-o-document class="w-5 h-5 text-gray-500 dark:text-gray-400"/>
                     @endif
                 </div>
             @endif
@@ -71,10 +53,10 @@
             @if($item->isFile())
                 <div class="mt-0.5 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                     @if($item->getDuration() && ($item->isVideo() || $item->isAudio()))
-                        <span>{{ $item->getFormattedDuration() }}</span>
+                        <span>{{ $item->getDuration() }}</span>
                     @endif
                     @if($item->getSize())
-                        <span>{{ $item->getFormattedSize() }}</span>
+                        <span>{{ $item->getSize() }}</span>
                     @endif
                 </div>
             @endif
@@ -85,34 +67,20 @@
                 {{-- Dropdown Menu --}}
                 <x-filament::dropdown placement="bottom-end">
                     <x-slot name="trigger">
-                        <button
-                            type="button"
-                            x-on:click.stop
-                            class="p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                            <x-heroicon-o-ellipsis-vertical class="w-4 h-4" />
+                        <button type="button" x-on:click.stop class="p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <x-heroicon-o-ellipsis-vertical class="w-4 h-4"/>
                         </button>
                     </x-slot>
 
                     <x-filament::dropdown.list>
-                        <x-filament::dropdown.list.item
-                            icon="heroicon-o-arrow-right-circle"
-                            x-on:click.stop="close(); $wire.openMoveDialog({{ json_encode($itemId) }})"
-                        >
-                            Move
+                        <x-filament::dropdown.list.item icon="heroicon-o-arrow-right-circle" x-on:click.stop="close(); $wire.openMoveDialog({{ json_encode($itemId) }})">
+                            {{ __('filemanager::messages.move') }}
                         </x-filament::dropdown.list.item>
-                        <x-filament::dropdown.list.item
-                            icon="heroicon-o-pencil"
-                            x-on:click.stop="close(); $wire.openRenameDialog({{ json_encode($itemId) }})"
-                        >
-                            Rename
+                        <x-filament::dropdown.list.item icon="heroicon-o-pencil" x-on:click.stop="close(); $wire.openRenameDialog({{ json_encode($itemId) }})">
+                            {{ __('filemanager::messages.rename') }}
                         </x-filament::dropdown.list.item>
-                        <x-filament::dropdown.list.item
-                            icon="heroicon-o-trash"
-                            color="danger"
-                            x-on:click.stop="close(); if(confirm('Are you sure you want to delete this item?')) $wire.deleteItem({{ json_encode($itemId) }})"
-                        >
-                            Delete
+                        <x-filament::dropdown.list.item icon="heroicon-o-trash" color="danger" x-on:click.stop="close(); if(confirm('{{ __('filemanager::messages.confirm_delete') }}')) $wire.deleteItem({{ json_encode($itemId) }})">
+                            {{ __('filemanager::messages.delete') }}
                         </x-filament::dropdown.list.item>
                     </x-filament::dropdown.list>
                 </x-filament::dropdown>

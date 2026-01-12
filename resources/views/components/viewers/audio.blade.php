@@ -41,15 +41,19 @@ Variables:
     {{-- Loading State --}}
     <div x-show="loading && !error" class="flex flex-col items-center justify-center">
         <div class="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-        <span class="text-sm text-gray-500 dark:text-gray-400">Loading audio...</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+            {{ __('filemanager::messages.loading_audio') }}
+        </span>
     </div>
 
     {{-- Error State --}}
     <div x-show="error" x-cloak class="flex flex-col items-center justify-center text-center p-6">
         <x-heroicon-o-speaker-x-mark class="w-12 h-12 text-amber-500 mb-3" />
-        <p class="text-gray-700 dark:text-gray-300 font-medium">Audio unavailable</p>
+        <p class="text-gray-700 dark:text-gray-300 font-medium">
+            {{ __('filemanager::messages.audio_unavailable') }}
+        </p>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            This audio file could not be loaded. It may be inaccessible or the URL has expired.
+            {{ __('filemanager::messages.audio_error_details') }}
         </p>
         @if($url)
             <a
@@ -58,7 +62,7 @@ Variables:
                 class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors text-sm"
             >
                 <x-heroicon-o-arrow-down-tray class="w-4 h-4" />
-                Download Audio
+                {{ __('filemanager::messages.download_audio') }}
             </a>
         @endif
     </div>
@@ -84,7 +88,7 @@ Variables:
             <source src="{{ $url }}" type="audio/mpeg">
             <source src="{{ $url }}" type="audio/wav">
             <source src="{{ $url }}" type="audio/ogg">
-            Your browser does not support the audio element.
+            {{ __('filemanager::messages.audio_not_supported') }}
         </audio>
     </div>
 </div>

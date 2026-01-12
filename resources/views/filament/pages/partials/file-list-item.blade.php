@@ -6,29 +6,29 @@
     $isSelected = $this->isSelected($itemId);
 @endphp
 <div
-    wire:key="list-{{ md5($itemId) }}"
-    x-data="{ isDragOver: false }"
-    @if(!$isReadOnly)
-        draggable="true"
+        wire:key="list-{{ md5($itemId) }}"
+        x-data="{ isDragOver: false }"
+        @if(!$isReadOnly)
+            draggable="true"
         x-on:dragstart="draggedItemId = @js($itemId); isDragging = true"
         x-on:dragend="isDragging = false; draggedItemId = null"
         @if($item->isFolder())
             x-on:dragover.prevent="isDragOver = true"
-            x-on:dragleave="isDragOver = false"
-            x-on:drop.prevent="isDragOver = false; if (draggedItemId && draggedItemId !== @js($itemId)) { $wire.handleDrop(@js($itemId), draggedItemId) }"
+        x-on:dragleave="isDragOver = false"
+        x-on:drop.prevent="isDragOver = false; if (draggedItemId && draggedItemId !== @js($itemId)) { $wire.handleDrop(@js($itemId), draggedItemId) }"
         @endif
-    @endif
-    x-on:click="$wire.handleItemClick(@js($itemId))"
-    class="group flex cursor-pointer items-center gap-4 bg-white dark:bg-gray-900 px-6 py-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800
+        @endif
+        x-on:click="$wire.handleItemClick(@js($itemId))"
+        class="group flex cursor-pointer items-center gap-4 bg-white dark:bg-gray-900 px-6 py-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800
         {{ $isSelected ? 'bg-primary-50 dark:bg-primary-900/20' : '' }}"
-    @if(!$isReadOnly):class="{ 'bg-primary-50 dark:bg-primary-900/20': isDragOver }"@endif
+        @if(!$isReadOnly):class="{ 'bg-primary-50 dark:bg-primary-900/20': isDragOver }"@endif
 >
     {{-- Selection Checkbox --}}
     @if(!$isReadOnly)
         <button
-            type="button"
-            x-on:click.stop="$wire.toggleSelection(@js($itemId), true)"
-            class="flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-all
+                type="button"
+                x-on:click.stop="$wire.toggleSelection(@js($itemId), true)"
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-all
                 {{ $isSelected
                     ? 'border-primary-500 bg-primary-500 text-white'
                     : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800' }}"
@@ -86,9 +86,9 @@
                 <x-filament::dropdown placement="bottom-end">
                     <x-slot name="trigger">
                         <button
-                            type="button"
-                            x-on:click.stop
-                            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                                type="button"
+                                x-on:click.stop
+                                class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                             <x-heroicon-o-ellipsis-vertical class="w-5 h-5" />
                         </button>
@@ -96,27 +96,27 @@
 
                     <x-filament::dropdown.list>
                         <x-filament::dropdown.list.item
-                            icon="heroicon-o-arrow-right-circle"
-                            x-on:click.stop="close"
-                            wire:click="openMoveDialog('{{ $itemId }}')"
+                                icon="heroicon-o-arrow-right-circle"
+                                x-on:click.stop="close"
+                                wire:click="openMoveDialog('{{ $itemId }}')"
                         >
-                            Move
+                            {{ __('filemanager::messages.move') }}
                         </x-filament::dropdown.list.item>
                         <x-filament::dropdown.list.item
-                            icon="heroicon-o-pencil"
-                            x-on:click.stop="close"
-                            wire:click="openRenameDialog('{{ $itemId }}')"
+                                icon="heroicon-o-pencil"
+                                x-on:click.stop="close"
+                                wire:click="openRenameDialog('{{ $itemId }}')"
                         >
-                            Rename
+                            {{ __('filemanager::messages.rename') }}
                         </x-filament::dropdown.list.item>
                         <x-filament::dropdown.list.item
-                            icon="heroicon-o-trash"
-                            color="danger"
-                            x-on:click.stop="close"
-                            wire:click="deleteItem('{{ $itemId }}')"
-                            wire:confirm="Are you sure you want to delete this item?"
+                                icon="heroicon-o-trash"
+                                color="danger"
+                                x-on:click.stop="close"
+                                wire:click="deleteItem('{{ $itemId }}')"
+                                wire:confirm="{{ __('filemanager::messages.confirm_delete') }}"
                         >
-                            Delete
+                            {{ __('filemanager::messages.delete') }}
                         </x-filament::dropdown.list.item>
                     </x-filament::dropdown.list>
                 </x-filament::dropdown>

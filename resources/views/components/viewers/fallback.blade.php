@@ -25,12 +25,12 @@ Variables:
     @endif
 
     <p class="text-lg font-medium text-gray-700 dark:text-gray-300">
-        Preview not available
+        {{ __('filemanager::messages.preview_not_available') }}
     </p>
     <p class="text-sm mt-1 text-center max-w-md text-gray-600 dark:text-gray-400">
-        This file type cannot be previewed in the browser.
+        {{ __('filemanager::messages.preview_browser_error') }}
         @if($fileType)
-            <br><span class="text-gray-500 dark:text-gray-400">Type: {{ $fileType->label() }}</span>
+            <br><span class="text-gray-500 dark:text-gray-400">{{ __('filemanager::messages.file_type') }}: {{ $fileType->label() }}</span>
         @endif
     </p>
 
@@ -41,7 +41,7 @@ Variables:
             class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors"
         >
             <x-heroicon-o-arrow-down-tray class="w-5 h-5" />
-            Download file
+            {{ __('filemanager::messages.download_file') }}
         </a>
     @endif
 
